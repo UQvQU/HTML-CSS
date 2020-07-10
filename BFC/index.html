@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>防止margin重叠</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  #wrap {
+    min-height: 100%;
+    background: pink;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  #wrap .main {
+    padding-bottom: 50px;
+  }
+
+  #footer {
+    height: 50px;
+    line-height: 50px;
+    background: deeppink;
+    text-align: center;
+    margin-top: -50px;
+  }
+  /* .parent {
+  overflow: hidden;
+  zoom: 1;
+} */
+.left {
+  float: left;
+  margin-right: 20px;
+}
+.right {
+  /* overflow: hidden; */
+  /* zoom: 1; */
+}
+.parent {
+  display:grid;
+  grid-template-columns:auto 1fr;
+  grid-gap:20px
+} 
+</style>
+
+<body>
+  <!-- <div id="wrap">
+    <div class="main">
+    <h1 style="height: 50px;">main</h1>
+    <h1 style="height: 50px;">main</h1>
+    <h1 style="height: 50px;">main</h1>
+    <h1 style="height: 50px;">main</h1>
+    <h1 style="height: 50px;">main</h1>
+    <h1 style="height: 50px;">main</h1>
+    <h1 style="height: 50px;">main</h1>
+    <h1 style="height: 50px;">main</h1>
+    <h1 style="height: 50px;">main</h1>
+    <h1 style="height: 50px;">main</h1>
+    <h1 style="height: 50px;">main</h1>
+    </div>
+  </div>
+  <div id="footer"></div> -->
+  <div class="parent" style="background-color: lightgrey;">
+    <div class="left" style="background-color: lightblue;">
+        <p>left</p>
+    </div>
+    <div class="right"  style="background-color: lightgreen;">
+        <p>right</p>
+        <p>right</p>
+    </div>        
+</div>
+</body>
+
+</html>
