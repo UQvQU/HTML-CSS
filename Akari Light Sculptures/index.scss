@@ -1,0 +1,359 @@
+/*
+~: a~b => 选择a后面的所有b，两种元素必须拥有相同的父元素，但是b不必直接紧随a
++: a+b => 相邻兄弟选择器，选择紧接在a后面的b元素，ab拥有共同的父元素
+>: a>b => css3特有，a元素的所有子b元素；与a b的区别在于：a b选择所有后代元素， a>b只选择一代
+*/
+$dark-color: #221c1d;
+$hook-height: 38px;
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  --bg-default: #484367;
+  --line-default: #706897;
+  --line-default-500: #4b456c;
+  --additional-light: #d8b269;
+  --bg-shadow: #443e65;
+  --text-headline: #fff4e3;
+  --text-subtitle: #f6ebd9;
+  --glare: #ffdd96;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  background-color: var(--bg-default);
+  margin-bottom: 40px;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: visible;
+  }
+}
+
+.lamp-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  user-select: none; // 防止选取文本
+
+  >.glare {
+    pointer-events: none; // 阻止点击、状态变化和鼠标指针变化
+    height: 600px;
+    width: 700px;
+    position: absolute;
+    left: 50%;
+    top: 48%;
+    transform: translate(-50%, -50%);
+    background-color: var(--glare);
+    z-index: 4;
+    filter: blur(80px);
+    border-radius: 50%;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  >.control {
+    // display: none;
+    opacity: 0;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    border: 1px solid #000;
+  }
+
+  >.base {
+    position: relative;
+    z-index: 1;
+
+    >.light {
+      display: none;
+      position: absolute;
+      left: 50%;
+      top: 56%;
+      transform: translateX(-50%);
+      filter: blur(20px);
+    }
+  }
+
+  >.support {
+    width: 72%;
+    margin-top: -8px;
+  }
+
+  >.additionalLight {
+    display: none;
+    background-color: var(--additional-light);
+    width: 270px;
+    height: 280px;
+    border-radius: 62% 61% 66% 58% / 79% 96% 33% 29%;
+    position: absolute;
+    top: 24px;
+    z-index: -2;
+    filter: blur(24px);
+    transform: scale(1.2);
+  }
+
+  >.shadow {
+    width: 50%;
+    height: 14px;
+    border-radius: 58% 61% 63% 58% / 76% 72% 52% 49%;
+    background-color: var(--bg-shadow);
+    filter: blur(8px);
+    position: absolute;
+    bottom: 8px;
+    z-index: -1;
+  }
+
+  >.background {
+    &::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -3;
+      background-color: var(--bg-default);
+    }
+  }
+}
+
+.base-container {
+  height: 278px;
+  width: 248px;
+  overflow: hidden;
+  border-radius: 62% 61% 66% 58% / 79% 96% 33% 29%;
+  background-image: repeating-radial-gradient(ellipse at 9% -75%,
+      var(--line-default),
+      var(--line-default) 3px,
+      rgba(255, 255, 255, 0) 4px,
+      var(--line-default) 11px);
+  background-size: 600% 208%;
+  position: relative;
+
+  // amazing！！  用伪类的border实现灯笼上的支撑条
+  &::before {
+    content: '';
+    height: 106%;
+    width: 160px;
+    border-left: 2px solid var(--line-default-500);
+    position: absolute;
+    left: 13%;
+    top: -3%;
+    border-radius: 79% 0% 66% 58% / 100% 99% 5% 29%;
+  }
+
+  &::after {
+    content: "";
+    height: 107%;
+    width: 97px;
+    border: 2px solid var(--line-default-500);
+    position: absolute;
+    left: 43%;
+    top: -2%;
+    border-radius: 28% 100% 87% 47% / 83% 87% 37% 16%;
+  }
+
+  >.depth {
+    height: 148px;
+    width: 117px;
+    margin-top: 21px;
+    background-color: #6e6993;
+    border-radius: 62% 37% 46% 45%/52% 41% 10% 33%;
+    filter: blur(24px);
+    opacity: 0.92;
+    position: relative;
+    margin-left: 47%;
+    z-index: 2;
+  }
+}
+
+.hook-element {
+  width: 14px;
+  height: $hook-height;
+  border-top: 2px solid $dark-color;
+  border-left: 2px solid $dark-color;
+  border-right: 2px solid $dark-color;
+  border-radius: 50% 50% 0% 0% / 36% 36% 10% 10%;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    bottom: -4px;
+    height: 8px;
+    width: 300%;
+    left: 50%;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    background-color: red;
+  }
+}
+
+.leg-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.leg-support {
+
+  border-top: 2px solid $dark-color;
+  border-left: 2px solid $dark-color;
+  border-top-left-radius: 4px;
+  height: 108px;
+  width: 10px;
+  position: relative;
+  transform: rotate(16deg) translateY(-4px);
+
+  &::after {
+    content: "";
+    background-color: $dark-color;
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0;
+    right: 4.5px;
+  }
+
+  &:nth-child(2n) {
+    height: 56px;
+    border-top: 0;
+    border-top-left-radius: 0;
+    transform: scaleX(-1) rotate(4deg);
+  }
+
+  &:nth-child(3n) {
+    transform: scaleX(-1) rotate(16deg) translate(12px, -6px);
+  }
+}
+
+.lamp-container {
+  >.control {
+    &:checked {
+      +.glare {
+        opacity: 1;
+        visibility: hidden;
+        animation: 2s fade-out forwards ease-in-out;
+      }
+
+      ~.base {
+        --line-default: #ffde8c;
+        --line-default-500: #ceaf6c;
+
+        >.light {
+          display: block;
+        }
+
+        >.base-container {
+          >.depth {
+            display: none;
+          }
+        }
+      }
+
+      ~.shadow {
+        //height: 80px;
+        --bg-shadow: #e4bc67;
+        filter: blur(14px);
+        width: 84%;
+        height: 20px;
+      }
+
+      ~.additionalLight {
+        display: block;
+      }
+
+      ~.background {
+        &::after {
+          --bg-default: radial-gradient(ellipse at 50% 48%,
+              #e4bc67,
+              #494369,
+              #4f4972);
+          background-size: 163% 164%;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+      }
+
+      ~.headline {
+        display: block;
+      }
+    }
+  }
+}
+
+.light-bulb {
+  width: 76px;
+  height: 76px;
+  border-radius: 45% 53% 35% 45% / 41% 44% 10% 10%;
+  background-image: radial-gradient(#f4f6f3, #fff894);
+  opacity: 0.8;
+}
+
+// @include viewport-4 {
+//   .lamp-container {
+//     margin-top: 240px;
+//     margin-bottom: 240px;
+
+//     >.control {
+//       ~.headline {
+//         position: static;
+//         margin-top: 40px;
+//         visibility: hidden;
+//         opacity: 0;
+//         pointer-events: none;
+//         display: inline-block;
+//       }
+
+//       ~.shadow {
+//         bottom: 20%;
+//       }
+
+//       &:checked {
+//         ~.headline {
+//           visibility: visible;
+//           opacity: 1;
+//           pointer-events: auto;
+//           z-index: 5;
+//         }
+
+//         ~.background {
+//           &::after {
+//             background-size: 190% 180%;
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
