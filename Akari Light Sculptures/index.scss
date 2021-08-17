@@ -59,7 +59,6 @@ body {
   flex-direction: column;
   align-items: center;
   position: relative;
-  cursor: pointer;
   user-select: none; // 防止选取文本
 
   >.glare {
@@ -88,7 +87,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
-    border: 1px solid #000;
+    cursor: pointer;
   }
 
   >.base {

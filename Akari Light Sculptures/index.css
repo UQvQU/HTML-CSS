@@ -85,7 +85,6 @@ body {
       -ms-flex-align: center;
           align-items: center;
   position: relative;
-  cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -120,7 +119,7 @@ body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   z-index: 10;
-  border: 1px solid #000;
+  cursor: pointer;
 }
 
 .lamp-container > .base {
