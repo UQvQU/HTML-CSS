@@ -24,6 +24,7 @@ let canvasApp = function () {
   drawScreen()
   drawClock()
   drawShadow()
+  drawImage()
 
   // first
   function drawScreen() {
@@ -53,15 +54,14 @@ let canvasApp = function () {
     context.clearRect(40, 50, 20, 20)
 
     // 显示图片
-    let imgUrl = theCanvas.toDataURL('image/png') // 图片无法导出？？
-    importImg(imgUrl)
+    let imgUrl = theCanvas.toDataURL('image/png')
+    importImg(imgUrl) // 图片无法导出？？
   }
 
   // second
   function drawClock() {
     let theCanvas = document.getElementById('secondCan')
     let context = theCanvas.getContext('2d')
-    console.log(context)
 
     context.fillStyle = "rgba(255,0,0,0.3)";
     context.fillRect(0, 0, 300, 300);
@@ -160,9 +160,11 @@ let canvasApp = function () {
     context.shadowBlur = 4
     context.shadowColor = 'rgba(106, 90, 205, 0.3)'
 
+    // 边框
     context.strokeStyle = '#abe'
     context.strokeRect(0, 0, 300, 300)
 
+    // 背景
     context.translate(10, 10)
     context.fillStyle = 'rgba(200, 238, 200, 1)'
     context.fillRect(0, 0, 280, 280)
@@ -173,6 +175,12 @@ let canvasApp = function () {
     context.strokeStyle = '#ab1'
     context.lineWidth = 3
     context.strokeRect(210, 40, 50, 20)
+
+    let gradient = context.createLinearGradient(0, 0, 280, 280)
+    gradient.addColorStop(0, '#F0FFFF')
+    gradient.addColorStop(1, '#4682B4')
+    context.strokeStyle = gradient
+    context.shadowColor = 'rgba(100,149,237, 0.1)'
 
     // 页面滚动会导致坐标不准确，得重新计算
     function write(event) {
@@ -188,9 +196,12 @@ let canvasApp = function () {
     // 清空路径
     function clearPath(event) {
       if (event.keyCode == 8) {
-        console.log('清空')
-        context.beginPath()
+        // console.log('清空')
+        context.translate(0, 0)
         context.clearRect(-10, -10, theCanvas.width, theCanvas.height)
+        context.strokeStyle = '#abe'
+        context.strokeRect(-10, -10, 300, 300)
+        context.beginPath()
       }
     }
     // 监听backspace键
@@ -198,22 +209,61 @@ let canvasApp = function () {
 
     // 监听鼠标按下
     theCanvas.addEventListener('mousedown', (event) => {
-      console.log('down', event.button, theCanvas.offsetLeft, theCanvas.offsetTop)
+      // console.log('down', event.button, theCanvas.offsetLeft, theCanvas.offsetTop)
       context.beginPath()
       // 监听鼠标移动
       theCanvas.addEventListener('mousemove', write)
     })
     // 监听鼠标松开
     theCanvas.addEventListener('mouseup', () => {
-      console.log('up')
+      // console.log('up')
       theCanvas.removeEventListener('mousemove', write)
     })
     // 监听鼠标离开
     theCanvas.addEventListener('mouseleave', () => {
-      console.log('leave')
+      // console.log('leave')
       theCanvas.removeEventListener('mousemove', write)
     })
 
+  }
+
+  // fourth
+  function drawImage() {
+    let theCanvas = document.getElementById('fourthCan')
+    let context = theCanvas.getContext('2d')
+
+    context.fillStyle = '#5F9EA0'
+    context.fillRect(0, 0, 300, 300)
+
+    context.globalAlpha = 0.8
+
+    //图片存储在本地时，是默认没有域名的，用getImageData方法时，浏览器会判定为跨域而报错！
+    // 解决办法：开启live server
+    let image = new Image()
+    // image.crossOrigin = "Anonymous"; //注意存放顺序
+    image.src = './img.jpg'
+    image.onload = () => {
+      context.drawImage(image, 10, 10, 200, 150)
+      let imageData = context.getImageData(10, 10, 200, 150)
+      let data = imageData.data
+      // console.log('data', imageData, data)
+      for (let i = 0, len = data.length; i < len; i += 4) {
+        let red = data[i]
+        let green = data[i + 1]
+        let blue = data[i + 2]
+
+        let average = Math.floor((red + green + blue) / 3)
+
+        data[i] = data[i + 1] = data[i + 2] = average
+      }
+
+      imageData.data = data
+      context.putImageData(imageData, 90, 120)
+    }
+
+    context.strokeStyle = '#abe'
+    context.lineWidth = 10
+    context.strokeRect(50, 50, 200, 80)
   }
 
   // 显示画布导出的图片
